@@ -4,6 +4,7 @@ var hbs = require ('express-handlebars');
 var routes = require ('./routes/index')
 var app = express ();
 
+app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.engine('hbs', hbs({defaultLayout: 'main', extname: '.hbs', layoutsDir: __dirname+'/views/layouts/'}));
 app.set('views', path.join(__dirname, 'views'));
