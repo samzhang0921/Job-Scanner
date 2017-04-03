@@ -1,3 +1,31 @@
-.js_result_container {
-  font-size:12px;
+ul li {
+    list-style: none;
+}
+
+.main-box {
+    box-sizing: border-box;
+    min-height: 100%;    
+    background: #212d35 url("/home/img/totaljobs/Campaign/hero-sm.jpg") no-repeat scroll center top / 100% 100%;
+}
+.navbar-default {
+    background-color: #005A9F;
+    border-color: #e7e7e7;
+    color:#ffffff;
+}
+
+.navbar-default .navbar-brand {
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #ffffff;
+}
+
+.jobs-info .metaData ul li{
+    margin: 5px;
+}
+
+.jobs-info .metaData ul {
+    padding: 0px;
 }
