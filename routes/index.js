@@ -97,7 +97,7 @@ router.get('/search', function (req, res) {
 
 
             
-            res.render('search/search', {
+            res.render('search', {
                 title: 'scanner',
                 content: jobs,
                 headScript: '<script src="/public/scripts/script.js"></script>',

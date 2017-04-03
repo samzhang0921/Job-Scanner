@@ -22,10 +22,6 @@ ul li {
     color: #ffffff;
 }
 
-.jobs-info .metaData ul li{
-    margin: 5px;
-}
-
-.jobs-info .metaData ul {
-    padding: 0px;
+.jobs-info .metaData li{
+    margin: 10px;
 }
