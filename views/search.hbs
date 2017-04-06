@@ -3,11 +3,11 @@
         <ul>
             {{#each content}}
             <li class="jumbotron jobs-info">
-                <h3>{{{this.title}}}</h3>
+                <h3><a target="_blank" href="{{this.site}}">{{this.title}}</a></h3>
                 <div class="clearfix">
                     <ul class="metaData col-md-6">
                         <li class="location"><i class="fa fa-map-marker" aria-hidden="true"></i> {{this.location}}</li>
-                        <li class="time"><i class="fa fa-clock-o" aria-hidden="true"></i> {{this.location}}
+                        <li class="time"><i class="fa fa-clock-o" aria-hidden="true"></i> {{this.time}}
                         </li>
                     </ul>
                     <ul class="metaData col-md-6">

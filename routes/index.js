@@ -4,6 +4,7 @@ var es6 = require('es6-promise').polyfill();
 var fetch = require('isomorphic-fetch');
 var request = require('request');
 var cheerio = require('cheerio');
+var bodyParser = require('body-parser')
 
 function generateUrl(base, type, pageKey, pageValue, keywordKey, keywordValue) {
     var url = [];
@@ -20,13 +21,17 @@ function generateUrl(base, type, pageKey, pageValue, keywordKey, keywordValue) {
     return url.join('');
 };
 
-function generateListUrls(pageValue, keywordValue) {
+function generateListUrls(keywordValue) {
     var allSiteUrls = [];
-    for (var i = 0; i < siteUrls.length; i++) {
-        var allSiteUrl = generateUrl(siteUrls[i].base, siteUrls[i].type, siteUrls[i].pageKey, pageValue, siteUrls[i].keyword, keywordValue);
-        allSiteUrls.push(allSiteUrl);
-    };
+    for (var k = 1; k < 4; k++) {
+      for (var i = 0; i < siteUrls.length; i++) {
+          var allSiteUrl = generateUrl(siteUrls[i].base, siteUrls[i].type, siteUrls[i].pageKey, k, siteUrls[i].keyword, keywordValue);
+          allSiteUrls.push(allSiteUrl);
+      };
+    }
+
     return allSiteUrls;
+
 };
 
 function generateHTMLlist(allSiteUrls){
@@ -91,18 +96,19 @@ function processHTML(res, htmlString){
     var $ = cheerio.load(ele);
     var items1 = $('article.job-result');
     var items2 = $('.job');
-    var items3 = $('.js_result_container');
-    console.log(items1.length);
+    var items3 = $('.js_result_container.primary');
+    // console.log(items1.length);
     if (items1.length) {
       items1.each(function () {
           var $this = $(this);
           var job = {
-              title: $this.find('.title').html(),
-              location: $this.find('.location').html(),
-              time: $this.find('.time').html(),
+              title: $this.find('.title').text(),
+              location: $this.find('.location').text(),
+              time: $this.find('.time').text(),
               salary: $this.find('.salary').html(),
               applications: $this.find('.applications').html(),
-              description: $this.find('.description').html()
+              description: $this.find('.description').html(),
+              site:"https://www.reed.co.uk"+$this.find('.title a').attr('href')
           };
           itemJobs.push(job);
       });
@@ -111,12 +117,13 @@ function processHTML(res, htmlString){
       items2.each(function () {
           var $this = $(this);
           var job = {
-              title: $this.find('.job-title').html(),
-              location: $this.find('.location').html(),
-              time: $this.find('.date-posted').html(),
+              title: $this.find('.job-title h2').text(),
+              location: $this.find('.location').text(),
+              time: $this.find('.date-posted').text(),
               salary: $this.find('.salary').html(),
-              applications: $this.find('.applications').html() || '',
-              description: $this.find('.job-intro').html()
+              applications: $this.find('.applications').html() || 'Unspecified',
+              description: $this.find('.job-intro').html(),
+              site:"https://www.totaljobs.com"+$this.find('.job-title a').attr('href')
           };
           itemJobs.push(job);
       });
@@ -125,19 +132,20 @@ function processHTML(res, htmlString){
       items3.each(function () {
           var $this = $(this);
           var job = {
-              title: $this.find('.jobTitle').html(),
-              location: $this.find('.job-specs-location').html(),
-              time: $this.find('.job-specs-date').html(),
-              salary: $this.find('.salary').html() || '',
-              applications: $this.find('.applications').html() || '',
-              description: $this.find('.job-intro').html() || ''
+              title: $this.find('.jobTitle h2').text(),
+              location: $this.find('.job-specs-location').text(),
+              time: $this.find('.job-specs-date').text(),
+              salary: $this.find('.salary').html() || 'Unspecified',
+              applications: $this.find('.applications').html() || 'Unspecified',
+              description: $this.find('.job-intro').html() || '',
+              site:"https://www.monster.co.uk"+$this.find('.jobTitle a').attr('href')
           };
           itemJobs.push(job);
       });
     }
   });
 
-  console.log(itemJobs);
+  console.log(itemJobs.length);
 
   res.render('search', {
       title: 'scanner',
@@ -146,28 +154,45 @@ function processHTML(res, htmlString){
       headStyle: '<link rel="stylesheet" href="/public/stylesheet/styles.css">'
   });
 }
-
-router.get('/search', function(req, res) {
-    var pageValue = req.query.page || 1;
-    var keywordValue = req.query.keyword || '';
-
-    var allSiteUrlList = generateListUrls(pageValue, keywordValue);
-    var infoListPromise = generateHTMLlist(allSiteUrlList);
-    var allHtml = [];
-    infoListPromise.forEach(function(promise, index){
-      promise.then(function(r){
-        allHtml.push(r);
-        if(allHtml.length === 3){
-          processHTML(res, allHtml);
-        }
-      });
-    });
-});
+//
+// router.get('/search', function(req, res) {
+//     var pageValue = req.query.page || 1;
+//     var keywordValue = req.query.keyword || '';
+//
+//     var allSiteUrlList = generateListUrls(pageValue, keywordValue);
+//     var infoListPromise = generateHTMLlist(allSiteUrlList);
+//     var allHtml = [];
+//     infoListPromise.forEach(function(promise, index){
+//       promise.then(function(r){
+//         allHtml.push(r);
+//         if(allHtml.length === 3){
+//           processHTML(res, allHtml);
+//         }
+//       });
+//     });
+// });
 
 router.post('/search', function(req, res){
-  // var keyword = req.body.keyword;
+  var keywordValue = req.body.keyword;
+  // var pageValue = req.query.page || 1;
+
+
+  var allSiteUrlList = generateListUrls(keywordValue);
+  console.log (allSiteUrlList);
+  var infoListPromise = generateHTMLlist(allSiteUrlList);
+  var allHtml = [];
+  infoListPromise.forEach(function(promise, index){
+    promise.then(function(r){
+      allHtml.push(r);
+      if(allHtml.length === allSiteUrlList.length){
+        processHTML(res, allHtml);
+
+
+      }
+    });
+  });
   // ...
-  res.end('posted');
+  // res.end('posted');
 
 });
 
