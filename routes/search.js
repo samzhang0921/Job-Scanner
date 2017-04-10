@@ -2,7 +2,9 @@ var express = require("express");
 var router = express.Router();
 var urlUtils = require('../middleware/urlUtils.js');
 var fetchUrl = require('../middleware/fetchUrl.js');
+var outputHTML = require('../middleware/outputHTML.js');
 var scanRender = require('../controller/scanRender.js');
+var apiFilter = require('../middleware/apiFilter.js');
 
 router.get('/', function(req, res){
     if(res.locals.itemJobs && res.locals.itemJobs.length>0){
@@ -16,7 +18,10 @@ router.post('/',
   urlUtils.prepare,
   urlUtils.generateListUrls,
   fetchUrl.generateAllPromises,
-  scanRender.fetchAll
+  fetchUrl.fetchAll,
+  outputHTML,
+  apiFilter,
+  scanRender.renderHTML
 );
 
 
