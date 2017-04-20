@@ -24,3 +24,14 @@
 //     };
 // xhr.send();
 // })
+
+
+window.onload = function (){
+ var liItems = document.getElementById('pagination').getElementsByTagName("li");
+
+ liItems.click(function(even){
+   even.preventDefault();
+   alert('kkk');
+ })
+
+}

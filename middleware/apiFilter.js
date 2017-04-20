@@ -1,6 +1,6 @@
 module.exports = function(req, res, next){
   var offset = parseInt(req.query.offset || 0);
-  var limit = parseInt(req.query.limit || 20);
+  var limit = parseInt(req.query.limit || 30);
   var total = res.locals.itemJobs.length;
   var upper = (offset >= total) ? total : offset + limit;
   res.locals.total = res.locals.itemJobs.length;

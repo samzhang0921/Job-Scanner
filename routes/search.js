@@ -5,6 +5,7 @@ var fetchUrl = require('../middleware/fetchUrl.js');
 var outputHTML = require('../middleware/outputHTML.js');
 var scanRender = require('../controller/scanRender.js');
 var apiFilter = require('../middleware/apiFilter.js');
+var pagination = require('../middleware/pagination.js');
 
 router.get('/', function(req, res){
     if(res.locals.itemJobs && res.locals.itemJobs.length>0){
@@ -21,6 +22,7 @@ router.post('/',
   fetchUrl.fetchAll,
   outputHTML,
   apiFilter,
+  pagination.pagination,
   scanRender.renderHTML
 );
 
