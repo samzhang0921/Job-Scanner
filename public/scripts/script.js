@@ -27,11 +27,14 @@
 
 
 window.onload = function (){
- var liItems = document.getElementById('pagination').getElementsByTagName("li");
+ var liItems = document.querySelectorAll("#pagination li a");
 
- liItems.click(function(even){
-   even.preventDefault();
-   alert('kkk');
- })
-
+ for (var i = 0; i<liItems.length; i++){
+     liItems[i].addEventListener("click", function(even){
+         even.preventDefault();
+         this.href;
+     })
+ };
+    
+    
 }

@@ -48,7 +48,7 @@ module.exports = function(req, res, next){
               salary: $this.find('.salary').html() || 'Unspecified',
               applications: $this.find('.applications').html() || 'Unspecified',
               description: $this.find('.job-intro').html() || '',
-              site:"https://www.monster.co.uk"+$this.find('.jobTitle a').attr('href')
+              site:$this.find('.jobTitle a').attr('href')
           };
           res.locals.itemJobs.push(job);
       });
