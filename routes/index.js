@@ -5,7 +5,9 @@ var fetch = require('isomorphic-fetch');
 var request = require('request');
 var bodyParser = require('body-parser')
 var searchRoute = require('./search.js');
+
 var apiRoute = require('./api.js');
+var account = require('./account.js');
 
 router.get('/', function(req, res) {
     res.render('index', {
@@ -18,5 +20,7 @@ router.get('/', function(req, res) {
 router.use('/search', searchRoute);
 
 router.use('/api', apiRoute);
+
+router.use('/account', account);
 
 module.exports = router;
