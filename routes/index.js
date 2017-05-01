@@ -20,6 +20,6 @@ router.use('/search', searchRoute);
 
 router.use('/api', apiRoute);
 
-//router.use('/account', account);
+router.use('/account', account);
 
 module.exports = router;
