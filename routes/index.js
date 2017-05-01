@@ -9,11 +9,16 @@ var apiRoute = require('./api.js');
 var account = require('./account.js');
 
 router.get('/', function(req, res) {
+  if (req.session.user) {
     res.render('index', {
         title: 'scanner',
         headScript: '<script src="/public/scripts/script.js"></script>',
         headStyle: '<link rel="stylesheet" href="/public/stylesheet/styles.css">'
     });
+  } else {
+    res.redirect('/account');
+  }
+
 });
 
 router.use('/search', searchRoute);
